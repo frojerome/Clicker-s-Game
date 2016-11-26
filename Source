@@ -1,0 +1,277 @@
+#Region ;**** Directives created by AutoIt3Wrapper_GUI ****
+#AutoIt3Wrapper_Icon=..\..\..\Downloads\Chrisl21-Minecraft-3D-Tree.ico
+#EndRegion ;**** Directives created by AutoIt3Wrapper_GUI ****
+#include <ButtonConstants.au3>
+#include <EditConstants.au3>
+#include <GUIConstantsEx.au3>
+#include <StaticConstants.au3>
+#include <WindowsConstants.au3>
+#include <File.au3>
+#Region ### START Koda GUI section ### Form=
+$Form1 = GUICreate("Clicker Game", 266, 135, -1, -1)
+$MenuItem1 = GUICtrlCreateMenu("Game")
+$MenuItem2 = GUICtrlCreateMenuItem("Shop", $MenuItem1)
+$MenuItem2a = GUICtrlCreateMenuItem("Cheat Code", $MenuItem1)
+$MenuItem3 = GUICtrlCreateMenu("Options")
+$MenuItem4 = GUICtrlCreateMenuItem("Mise à Jour", $MenuItem3)
+
+$Button1 = GUICtrlCreateButton("CLICK", 72, 64, 115, 41)
+$Button2 = GUICtrlCreateButton("Shop", 168, 16, 75, 25)
+$Input1 = GUICtrlCreateInput("", 56, 16, 65, 21)
+GUICtrlSetState(-1, $GUI_DISABLE)
+$Label1 = GUICtrlCreateLabel("Points :", 8, 16, 39, 17)
+GUISetState(@SW_SHOW)
+#EndRegion ### END Koda GUI section ###
+
+FileOpen("Settings")
+$Read = FileReadLine("Settings", 3)
+If $Read = "Employé : FALSE" Or $Read = "Employé : TRUE" Then
+Else
+	FileWriteLine("Settings", " ")
+	FileWriteLine("Settings", " ")
+	FileWriteLine("Settings", " ")
+	FileWriteLine("Settings", " ")
+	FileWriteLine("Settings", " ")
+
+	_FileWriteToLine("Settings", 2, "MultiX : FALSE", True)
+	_FileWriteToLine("Settings", 3, "Employé : FALSE", True)
+	_FileWriteToLine("Settings", 4, "Machine : FALSE", True)
+	_FileWriteToLine("Settings", 5, "Usine : FALSE", True)
+EndIf
+$point = FileReadLine("Settings", 1)
+
+GuiCtrlSetData($Input1, $point)
+FileClose("Settings")
+
+	$Read = FileReadLine("Settings", 3)
+	If $Read = "Employé : TRUE" Then
+		AdlibRegister("Employ", 1000)
+	EndIf
+	$Read = FileReadLine("Settings", 4)
+	If $Read = "Machine : TRUE" Then
+		AdlibRegister("Machine", 1000)
+	$Read = FileReadLine("Settings", 5)
+	If $Read = "Usine : TRUE" Then
+		AdlibRegister("Usine", 1000)
+	EndIf
+	EndIf
+While 1
+	$nMsg = GUIGetMsg()
+	Switch $nMsg
+		Case $GUI_EVENT_CLOSE
+			FileOpen("Settings")
+			_FileWriteToLine("Settings", 1, $point, True)
+			FileClose("Settings")
+			Exit
+		Case $Button1
+			$Read = FileReadLine("Settings", 2)
+			If $Read = "MultiX2 : TRUE" Then
+				$point = $point + 2
+			ElseIf $Read = "MultiX4 : TRUE" Then
+				$point = $point + 4
+			ElseIf $Read = "MultiX8 : TRUE" Then
+				$point = $point + 8
+			Else
+			$point = $point + 1
+			EndIf
+			GUICtrlSetData($Input1, $point)
+		Case $Button2
+			SHOP()
+		Case $MenuItem2
+			SHOP()
+		Case $MenuItem4
+			maj()
+		Case $MenuItem2a
+			$msg = InputBox("Clicker's Codes", "Veuillez entrer votre Code !")
+			If $msg = "MONEY" Then
+				$point = $point + 10000
+				GUICtrlSetData($Input1, $point)
+			ElseIf $msg = "RESET" Then
+				$point = 0
+				_FileWriteToLine("Settings", 2, "MultiX : FALSE", True)
+				_FileWriteToLine("Settings", 3, "Employé : FALSE", True)
+				_FileWriteToLine("Settings", 4, "Machine : FALSE", True)
+				_FileWriteToLine("Settings", 5, "Usine : FALSE", True)
+				AdlibUnRegister("Employ")
+				AdlibUnRegister("Usine")
+				AdlibUnRegister("Machine")
+				GUICtrlSetData($Input1, $point)
+			ElseIf $msg = "Credits" Then
+				MsgBox(0, "","Made by Wizzar/frojerome")
+			EndIf
+	EndSwitch
+
+WEnd
+
+
+Func SHOP()
+
+	$Form1a = GUICreate("Clicker's Shop", 387, 137, -1, -1)
+	$Group1a = GUICtrlCreateGroup("Multiplicateurs", 8, 8, 193, 113)
+	$Label1a = GUICtrlCreateLabel("Multiplicateur X2 :", 16, 32, 88, 17)
+	$Button1a = GUICtrlCreateButton("500 Points", 112, 24, 75, 25)
+	$Label2a = GUICtrlCreateLabel("Multiplicateur X4 :", 16, 64, 88, 17)
+	$Button2a = GUICtrlCreateButton("5 000 Points", 112, 56, 75, 25)
+	$Label3a = GUICtrlCreateLabel("Multiplicateur X8 :", 16, 96, 88, 17)
+	$Button3a = GUICtrlCreateButton("50 000 Points", 112, 88, 75, 25)
+	GUICtrlCreateGroup("", -99, -99, 1, 1)
+	$Group2a = GUICtrlCreateGroup("Farmeur", 224, 8, 153, 113)
+	$Label1b = GUICtrlCreateLabel("Employé :", 232, 32, 50, 17)
+	$Button1b = GUICtrlCreateButton("500 Points", 288, 24, 75, 25)
+	$Label2b = GUICtrlCreateLabel("Machine :", 232, 64, 51, 17)
+	$Label3b = GUICtrlCreateLabel("Usine :", 232, 96, 37, 17)
+	$Button2b = GUICtrlCreateButton("8 000 Points", 288, 56, 75, 25)
+	$Button3b = GUICtrlCreateButton("99 000 Points", 288, 88, 75, 25)
+	GUICtrlCreateGroup("", -99, -99, 1, 1)
+	GUISetState(@SW_SHOW)
+
+	$Read = FileReadLine("Settings", 2)
+	If $Read = "MultiX2 : TRUE" Then
+		GuiCtrlSetState($Button1a, $GUI_DISABLE)
+	ElseIf $Read = "MultiX4 : TRUE" Then
+		GuiCtrlSetState($Button1a, $GUI_DISABLE)
+		GuiCtrlSetState($Button2a, $GUI_DISABLE)
+	ElseIf $Read = "MultiX8 : TRUE" Then
+		GuiCtrlSetState($Button1a, $GUI_DISABLE)
+		GuiCtrlSetState($Button2a, $GUI_DISABLE)
+		GuiCtrlSetState($Button3a, $GUI_DISABLE)
+	EndIf
+
+	$Read = FileReadLine("Settings", 3)
+	If $Read = "Employé : TRUE" Then
+		GuiCtrlSetState($Button1b, $GUI_DISABLE)
+	EndIf
+	$Read = FileReadLine("Settings", 4)
+	If $Read = "Machine : TRUE" Then
+		GuiCtrlSetState($Button2b, $GUI_DISABLE)
+	EndIf
+	$Read = FileReadLine("Settings", 5)
+	If $Read = "Usine : TRUE" Then
+		GuiCtrlSetState($Button3b, $GUI_DISABLE)
+	EndIf
+
+
+
+	While 1
+		$nMsg = GUIGetMsg()
+		Switch $nMsg
+			Case $GUI_EVENT_CLOSE
+				GUISetState(@SW_HIDE)
+				ExitLoop
+			Case $Button1a
+				If $point >= 500 Then
+					$point = $point - 500
+					_FileWriteToLine("Settings", 2, "MultiX2 : TRUE", True)
+					GuiCtrlSetState($Button1a, $GUI_DISABLE)
+					GuiCtrlSetData($Input1, $point)
+				Else
+					MsgBox(0, "", "Vous n'avez pas assez de points !")
+
+				EndIf
+
+			Case $Button2a
+				If $point >= 5000 Then
+						$point = $point - 5000
+					_FileWriteToLine("Settings", 2, "MultiX4 : TRUE", True)
+					GuiCtrlSetState($Button2a, $GUI_DISABLE)
+					GuiCtrlSetData($Input1, $point)
+				Else
+					MsgBox(0, "", "Vous n'avez pas assez de points !")
+
+				EndIf
+
+			Case $Button3a
+				If $point >= 50000 Then
+						$point = $point - 50000
+					_FileWriteToLine("Settings", 2, "MultiX8 : TRUE", True)
+					GuiCtrlSetState($Button3a, $GUI_DISABLE)
+					GuiCtrlSetData($Input1, $point)
+				Else
+					MsgBox(0, "", "Vous n'avez pas assez de points !")
+
+				EndIf
+
+
+
+			Case $Button1b
+				If $point >= 500 Then
+						$point = $point - 500
+					_FileWriteToLine("Settings", 3, "Employé : TRUE", True)
+					GuiCtrlSetState($Button1b, $GUI_DISABLE)
+					AdlibRegister("Employ", 1000)
+					GuiCtrlSetData($Input1, $point)
+				Else
+					MsgBox(0, "", "Vous n'avez pas assez de points !")
+				EndIf
+
+			Case $Button2b
+				If $point >= 8000 Then
+						$point = $point - 8000
+					_FileWriteToLine("Settings", 4, "Machine : TRUE", True)
+					GuiCtrlSetState($Button2b, $GUI_DISABLE)
+					AdlibRegister("Machine", 1000)
+					GuiCtrlSetData($Input1, $point)
+				Else
+					MsgBox(0, "", "Vous n'avez pas assez de points !")
+				EndIf
+
+			Case $Button3b
+				If $point >= 99000 Then
+						$point = $point - 99000
+					_FileWriteToLine("Settings", 5, "Usine : TRUE", True)
+					GuiCtrlSetState($Button3b, $GUI_DISABLE)
+					AdlibRegister("Usine", 1000)
+					GuiCtrlSetData($Input1, $point)
+				Else
+					MsgBox(0, "", "Vous n'avez pas assez de points !")
+				EndIf
+		EndSwitch
+	WEnd
+
+EndFunc
+
+
+
+Func Employ()
+	$point = $point + 1
+	GuiCtrlSetData($Input1, $point)
+	Return
+EndFunc
+
+Func Machine()
+	$point = $point + 10
+	GuiCtrlSetData($Input1, $point)
+	Return
+EndFunc
+
+Func Usine()
+	$point = $point + 100
+	GuiCtrlSetData($Input1, $point)
+	Return
+EndFunc
+
+Func maj()
+	FileDelete("Version")
+	FileOpen("Version")
+	FileWrite("Version", "1.0.0")
+
+	InetGet("https://github.com/frojerome/Clicker-s-Game/releases/download/Version.emt/Version.emt", "Version.emt")
+	$Read1 = FileRead("Version")
+	$Read2 = FileReadLine("Version.emt", 1)
+	$ReadDL = FileReadLine("Version.emt", 2)
+	If $Read1 = $Read2 Then
+		MsgBox(0,"", "Votre version est à jour !")
+	Else
+		$bout = MsgBox(4,"", "Votre version n'est pas à jour ! Voulez-vous la mettre à jour ?")
+		If $bout = 6 Then
+				InetGet($ReadDL, "Clicker" & $Read2 & ".exe")
+				MsgBox(0,"","Mise à Jour terminé !")
+				Sleep(500)
+				FileDelete("Version")
+				FileDelete("Version.emt")
+				Exit
+		EndIf
+	EndIf
+	FileDelete("Version")
+	FileDelete("Version.emt")
+EndFunc
